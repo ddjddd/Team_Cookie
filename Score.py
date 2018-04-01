@@ -36,7 +36,7 @@ def score2integer():
             if(aspect_ratio >= 0.2)and(aspect_ratio <= 1.0)and(rect_area >= 150)and(rect_area <= 450):
                 for idx, tmp in enumerate(tpl_contour_list):
                     res = cv2.matchShapes(score_cnt, tmp, 1, 0.0)
-                    print(idx, resab)
+                    print(idx, res)
                     if res > 9.0:
                         cv2.drawContours(score_frame, [score_contours[i]], 0, (0, 255, 0), 2)
 
