@@ -109,22 +109,22 @@ def score2int(score_frame):
     score.sort()        # 점수 외곽선들을 왼쪽부터 순서대로 정렬
 
     judge = True
-    if score[0][1] is not 10:       # 점수 외곽선들의 맨 왼쪽 값이 젤리가 아닌 경우
-        score_result = 0
-        judge = False
-    else:                           # 이외의 경우
-        score_result = 0
-        for i in range(len(score)):         # 점수 배열을 정수 값으로 변환하는 과정
-            if score[i][1] is not 10:           # 젤리로 인식되지 않은 경우 (0-9 로 인식)
-                score_result *= 10
-                score_result += score[i][1]
+    # if len(score) > 0 and score[0][1] is not 10:       # 점수 외곽선들의 맨 왼쪽 값이 젤리가 아닌 경우
+    #     score_result = 0
+    #     judge = False
+    # else:                           # 이외의 경우
+    score_result = 0
+    for i in range(len(score)):         # 점수 배열을 정수 값으로 변환하는 과정
+        if score[i][1] is not 10:           # 젤리로 인식되지 않은 경우 (0-9 로 인식)
+            score_result *= 10
+            score_result += score[i][1]
 
     return score_result, judge
 
 
 # 점수 표시 부분의 사이즈 설정
 def get_score_size(height, width):
-    sx1 = int(width * 70 / 100)
+    sx1 = int(width * 60 / 100)
     sx2 = int(width * 95 / 100)
     sy1 = int(height * 1 / 100)
     sy2 = int(height * 7 / 100)
