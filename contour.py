@@ -12,13 +12,13 @@ def midpoint(ptA, ptB):
 
 
 # load the image, convert it to grayscale, and blur it slightly
-image = cv2.imread('map4.png')
+image = cv2.imread('img/map1.png')
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 gray = cv2.GaussianBlur(gray, (7, 7), 0)
 
 # perform edge detection, then perform a dilation + erosion to
 # close gaps in between object edges
-edged = cv2.Canny(gray, 50, 100)
+edged = cv2.Canny(gray, 50, 10)    # canny threshold(image, threshold1, threshold2)
 edged = cv2.dilate(edged, None, iterations=1)
 edged = cv2.erode(edged, None, iterations=1)
 cv2.imshow("contours", edged)
@@ -53,6 +53,7 @@ for c in cnts:
     box = perspective.order_points(box)
     cv2.drawContours(orig, [box.astype("int")], -1, (0, 255, 0), 2)
 
+
     # loop over the original points and draw them
     for (x, y) in box:
         cv2.circle(orig, (int(x), int(y)), 5, (0, 0, 255), -1)
@@ -83,6 +84,9 @@ for c in cnts:
     # compute the Euclidean distance between the midpoints
     dA = dist.euclidean((tltrX, tltrY), (blbrX, blbrY))
     dB = dist.euclidean((tlblX, tlblY), (trbrX, trbrY))
+    print(dA)
+    print(dB)
+    print('=====')
 
     # if the pixels per metric has not been initialized, then
     # compute it as the ratio of pixels to supplied metric
@@ -90,11 +94,13 @@ for c in cnts:
     if pixelsPerMetric is None:
         pixelsPerMetric = dB / 2
 
-        # compute the size of the object
-        dimA = dA / pixelsPerMetric
-        dimB = dB / pixelsPerMetric
+    # compute the size of the object
+    dimA = dA / pixelsPerMetric
+    dimB = dB / pixelsPerMetric
 
-
+    print(dimA)
+    print(dimB)
+    print('-----------------')
     # draw the object sizes on the image
     cv2.putText(orig, "{:.1f}in".format(dimA),
                 (int(tltrX - 15), int(tltrY - 10)), cv2.FONT_HERSHEY_SIMPLEX,
@@ -105,4 +111,4 @@ for c in cnts:
 
     # show the output image
     cv2.imshow("Image", orig)
-    cv2.waitKey(1)
+    cv2.waitKey()
