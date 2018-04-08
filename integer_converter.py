@@ -1,5 +1,5 @@
 import cv2
-
+import bluestack_api
 
 tpl_name_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'B']
 tpl_contour_list = []
@@ -10,7 +10,7 @@ def read_template():        # 템플릿 읽어오기 (resources 폴더에 저장
 
     for file in tpl_name_list:
         rx = 10000
-        img = cv2.imread('resources/' + file + '.png', cv2.IMREAD_COLOR)    # 이미지 읽어오기
+        img = cv2.imread('resources/Templates/' + file + '.png', cv2.IMREAD_COLOR)    # 이미지 읽어오기
         img_blur = cv2.GaussianBlur(img, (3, 3), 0)                 # 가우시안 블러 효과 적용
         img_canny = cv2.Canny(img_blur, 100, 200)                   # 캐니 효과 적용
         _, digit_contours, _ = cv2.findContours(img_canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)    # 모든 외곽선 찾기
@@ -138,7 +138,7 @@ def get_health_size(height, width):         # 체력 표시 부분의 사이즈 
 
 def main():        # 메인 함수
     global tpl_name_list, tpl_contour_list          # 전역 변수로 설정
-    video = cv2.VideoCapture('cookierun.mp4')
+    video = cv2.VideoCapture('resources/Examples/cookierun.mp4')
     read_template()         # 템플릿 읽기
 
     recent_score = 0
@@ -169,6 +169,5 @@ def main():        # 메인 함수
 
     video.release()
     cv2.destroyAllWindows()
-
 
 main()
