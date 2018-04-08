@@ -1,15 +1,32 @@
+import pyscreenshot as ImageGrab
 import cv2
+import numpy as np
+
 import integer_converter as ic
+import bluestack_api as bs
 
 
-def main():        # 메인 함수
+def screenshots():
+    x1 = 0
+    x2 = 830
+    y1 = 40
+    y2 = 510
+    img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
+    img_np = np.array(img)
+    return img_np
+
+# 메인 함수
+def main():
     video = cv2.VideoCapture('resources/Examples/cookierun.mp4')
     ic.read_template()         # 템플릿 읽기
 
     recent_score = 0
     while True:
         ret, frame = video.read()               # 동영상 입력 받기
+        # frame = screenshots()
         height, width, channels = frame.shape   # 동영상의 크기 입력
+
+        # print(height, width)
 
         # 이미지에서 점수 추출하기
         sx1, sx2, sy1, sy2 = ic.get_score_size(height, width)      # 점수표시부분 크기 추출
@@ -24,16 +41,21 @@ def main():        # 메인 함수
         health_frame = frame[hy1:hy2, hx1:hx2]                      # 체력 표시 부분만 잘라내기
         health = ic.health2int(health_frame, height, width)         # 이미지->체력으로 변환
 
-        # 이미지에 변환된 값들 출력
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(frame, str(health), (20, 30), font, 1, (255, 255, 255), 2, cv2.LINE_AA)     # 체력 출력
-        cv2.putText(frame, str(score), (550, 30), font, 1, (255, 255, 255), 2, cv2.LINE_AA)     # 점수 출력
+        cv2.putText(frame, str(health), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+        cv2.putText(frame, str(score), (550, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+
 
         cv2.imshow('Cookie', frame)
-        cv2.waitKey(10)
+        cv2.waitKey(1)
+        print(score, health)
 
     video.release()
     cv2.destroyAllWindows()
 
 
-main()
+if __name__ == '__main__':
+     main()
+
+    # frame = screenshots()
+    # cv2.imshow('crop', frame)
+    # cv2.waitKey(0)
