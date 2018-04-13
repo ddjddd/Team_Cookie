@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 
 import integer_converter as ic
+import obstacle_detector as od
 import bluestack_api as bs
 
 
@@ -14,6 +15,7 @@ def screenshots():
     img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
     img_np = np.array(img)
     return img_np
+
 
 # 메인 함수
 def main():
@@ -41,13 +43,17 @@ def main():
         health_frame = frame[hy1:hy2, hx1:hx2]                      # 체력 표시 부분만 잘라내기
         health = ic.health2int(health_frame, height, width)         # 이미지->체력으로 변환
 
+        wx1, wx2, wy1, wy2 = od.get_roi_window_size(height, width)
+
+        roi_frame = frame[wy1:wy2, wx1: wx2]
+        od.detector(roi_frame, height, width)
+        # cv2.imshow('roi', roi_frame)
+
         cv2.putText(frame, str(health), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
         cv2.putText(frame, str(score), (550, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
-
         cv2.imshow('Cookie', frame)
-        cv2.waitKey(1)
-        print(score, health)
+        cv2.waitKey(10)
 
     video.release()
     cv2.destroyAllWindows()
