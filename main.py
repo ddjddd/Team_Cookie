@@ -44,16 +44,15 @@ def main():
         health = ic.health2int(health_frame, height, width)         # 이미지->체력으로 변환
 
         wx1, wx2, wy1, wy2 = od.get_roi_window_size(height, width)
-
         roi_frame = frame[wy1:wy2, wx1: wx2]
-        od.detector(roi_frame, height, width)
+        od.detector(roi_frame, wy2-wy1, wx2-wx1)
         # cv2.imshow('roi', roi_frame)
 
         cv2.putText(frame, str(health), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
         cv2.putText(frame, str(score), (550, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
         cv2.imshow('Cookie', frame)
-        cv2.waitKey(10)
+        cv2.waitKey(0)
 
     video.release()
     cv2.destroyAllWindows()
