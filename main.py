@@ -4,6 +4,7 @@ import numpy as np
 
 import integer_converter as ic
 import obstacle_detector as od
+import ground as gd
 import bluestack_api as bs
 
 
@@ -47,6 +48,10 @@ def main():
         roi_frame = frame[wy1:wy2, wx1: wx2]
         od.detector(roi_frame, wy2-wy1, wx2-wx1)
         # cv2.imshow('roi', roi_frame)
+
+        roi = frame[int(height * 0.8):int(height * 0.9), int(width * 0.15):int(width * 0.8)]
+        gd.ground(roi)
+        # gd.ground(frame)
 
         cv2.putText(frame, str(health), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
         cv2.putText(frame, str(score), (550, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
