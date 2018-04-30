@@ -3,7 +3,7 @@ from src.detectors import cookie as ck
 
 unit = 0    # unit = 그리드 한 칸(정사각형)의 길이
 vertical_max, horizontal_max = 12, 9   # 가로 12칸, 세로 9칸
-grid_x, grid_y = 0, 0
+grid_x, grid_y = 0, 0       # 그리드의 시작지점. 변수 초기화
 
 
 def draw_grid(frame):
@@ -22,17 +22,19 @@ def draw_grid(frame):
                  (40, 40, 40), 2, 1)
 
 
+# 최초 1회로 검사
+# 화면에서 쿠키의 위치를 찾고 이를 기준으로 그리드 생성에 필요한 변수를 설정한다
 def detect_first(frame):
     global unit, grid_x, grid_y
     # frame을 HSV (hue-saturation-value)로 변환한다
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    # 해당 범위에 속하는 각 색깔을 찾는다
 
+    # 해당 범위에 속하는 각 색깔을 찾는다
     brown = cv2.inRange(hsv, ck.brown_lower, ck.brown_upper)
     brown = cv2.dilate(brown, ck.kernel)
 
-    # cookie
-    _, contours, hierarchy = cv2.findContours(brown, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)  # 밤 때문에 가려지는 경우가 존재.
+    # 윤곽선 검출        # 밤 때문에 가려지는 경우가 존재.
+    _, contours, hierarchy = cv2.findContours(brown, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     for pic, contour in enumerate(contours):
         area = cv2.contourArea(contour)
         hierarchy_num = hierarchy[0][pic][-1]
