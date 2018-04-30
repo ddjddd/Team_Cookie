@@ -1,3 +1,7 @@
+# 각각의 윈도우 사이즈를 반환하는 모듈
+
+
+# 게임 플레이 주요 화면
 def get_play_window_size(hgt, wth):
     wx1 = int(wth * 30 / 100)
     wx2 = int(wth * 80 / 100)
@@ -6,6 +10,7 @@ def get_play_window_size(hgt, wth):
     return wx1, wx2, wy1, wy2
 
 
+# 바닥 화면
 def get_ground_size(hgt, wth):
     wx1 = int(wth * 20 / 100)
     wx2 = int(wth * 80 / 100)
