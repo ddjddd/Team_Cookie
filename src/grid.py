@@ -13,13 +13,13 @@ def draw_grid(frame):
         cv2.line(frame,
                  (grid_x + unit * ver, grid_y),
                  (grid_x + unit * ver, grid_y + unit * horizontal_max),
-                 (0, 0, 0), 2, 1)
+                 (40, 40, 40), 2, 1)
     # 그리드 세로 선
     for hor in range(horizontal_max + 1):
         cv2.line(frame,
                  (grid_x, grid_y + unit * hor),
                  (grid_x + unit * vertical_max, grid_y + unit * hor),
-                 (0, 0, 0), 2, 1)
+                 (40, 40, 40), 2, 1)
 
 
 def detect_first(frame):
