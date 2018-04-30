@@ -1,5 +1,6 @@
 import cv2
 from src import image_filter as imf
+from src.detectors import collision_detector as cd
 
 
 def make_obstacle_list(obstacle_list):
@@ -32,27 +33,34 @@ def make_obstacle_list(obstacle_list):
                 j = i + 1
 
 
-def obstacle(play_frame, height, width):
-    roi_canny = imf.make_canny(play_frame)
-    obstacle_list = []
+def obstacle(frame, wx1, wx2, wy1, wy2):
+    play_frame = frame[wy1:wy2, wx1:wx2]  # 플레이 화면만 잘라내기
+    play_canny = imf.make_canny(play_frame)
+    object_list = []
 
-    _, roi_contours, roi_hierarchy = cv2.findContours(roi_canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    _, roi_contours, roi_hierarchy = cv2.findContours(play_canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     for i in range(len(roi_contours)):
         x, y, w, h = cv2.boundingRect(roi_contours[i])
         rect_area = w * h
-        if roi_hierarchy[0][i][3] is not -1:
+        if roi_hierarchy[0][i][3] == -1:
             if rect_area >= 550:
-                obstacle_list.append([x, y, x+w, y+h])
+                object_list.append([x+wx1, y+wy1, x+w+wx1, y+h+wy1])
+                # object_list.append([x, y, x + w, y + h])
 
-    make_obstacle_list(obstacle_list)
+    make_obstacle_list(object_list)
 
-    for i in range(len(obstacle_list)):
-        x, y, w, h = obstacle_list[i]
-        if y <= 10:
-            cv2.rectangle(play_frame, (x, y), (w, h), (0, 0, 255), 2)
-        elif h >= height - 10:
-            cv2.rectangle(play_frame, (x, y), (w, h), (0, 0, 255), 2)
+    obstacle_list = []
+    for i in range(len(object_list)):
+        x, y, w, h = object_list[i]
+        if y <= wy1 + 10:
+            obstacle_list.append(object_list[i])
+            # cv2.rectangle(frame, (x, y), (w, h), (0, 0, 255), 2)
+        elif h >= wy2 - 10:
+            obstacle_list.append(object_list[i])
+            # cv2.rectangle(frame, (x, y), (w, h), (0, 0, 255), 2)
         else:
-            cv2.rectangle(play_frame, (x, y), (w, h), (0, 255, 0), 2)
+            cv2.rectangle(frame, (x, y), (w, h), (0, 255, 0), 2)
+
+    cd.obstacle_collision(frame, obstacle_list)
 
     return
