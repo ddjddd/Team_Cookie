@@ -1,5 +1,5 @@
 import cv2
-from src import image_filter as imf, window_size as ws
+from src import image_filter as imf
 from src.detectors import collision_detector as cd
 
 
