@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 # capturing video through webcam
-cap = cv2.VideoCapture("cookierun.mp4")
+cap = cv2.VideoCapture("img/cookierun.mp4")
 
 # defining the Range of yellow color - 이 값은 HSV trackbar을 실시하면서 얻어냈다
 # yellow : 노란색 곰젤리, 코인
@@ -213,6 +213,7 @@ while (ret):
 
     # 그리드 한 칸마다 쿠키(혹은 다른 물체) 가 있는지 확인하기
     for ver in range(verticle_num):
+        # grid_unit_length: 그리드 한 칸의 길이
         for hor in range(horizontal_num):
             if in_grid(grid_unit_length, grid_x_start+ver*grid_unit_length, grid_y_start+hor*grid_unit_length, cookie_save_x, cookie_save_y, cookie_save_w, cookie_save_h) :
                 #쿠키가 있다고 판단된 그리드 좌표
