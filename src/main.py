@@ -4,6 +4,7 @@ import numpy as np
 
 from src.detectors import obstacles as ob, score as sc, ground as gd, health as ht
 from src import window_size as ws
+from src import grid
 
 
 def screenshots():
@@ -21,7 +22,11 @@ def main():
     video = cv2.VideoCapture('../resources/Examples/cookierun.mp4')
     sc.read_template()         # 템플릿 읽기
 
+    ret, frame = video.read()
+    grid.detect_first(frame)
+
     recent_score = 0
+    sx, sy, sw, sh = 0, 0, 0, 0
     while True:
         ret, frame = video.read()               # 동영상 입력 받기
         # frame = screenshots()
@@ -48,16 +53,19 @@ def main():
         ob.obstacle(play_frame, wy2 - wy1, wx2 - wx1)
         # cv2.imshow('roi', roi_frame)
 
-        wx1, wx2, wy1, wy2 = ws.get_ground_size(height, width)
-        ground_frame = frame[wy1:wy2, wx1:wx2]
+        gx1, gx2, gy1, gy2 = ws.get_ground_size(height, width)
+        ground_frame = frame[gy1:gy2, gx1:gx2]
         gd.ground(ground_frame)
         # gd.ground(frame)
+
+        # sx, sy, sw, sh = ct.cookie(frame, sx, sy, sw, sh)
+        grid.draw_grid(frame)
 
         cv2.putText(frame, str(health), (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
         cv2.putText(frame, str(score), (550, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
         cv2.imshow('Cookie', frame)
-        cv2.waitKey(0)
+        cv2.waitKey(1)
 
     video.release()
     cv2.destroyAllWindows()
