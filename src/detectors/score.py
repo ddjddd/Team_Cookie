@@ -1,4 +1,5 @@
 import cv2
+from src import image_filter as imf
 
 tpl_name_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'B']
 tpl_contour_list = []
@@ -10,7 +11,7 @@ def read_template():
 
     for file in tpl_name_list:
         rx = 10000
-        img = cv2.imread('resources/Templates/' + file + '.png', cv2.IMREAD_COLOR)    # 이미지 읽어오기
+        img = cv2.imread('../resources/Templates/' + file + '.png', cv2.IMREAD_COLOR)    # 이미지 읽어오기
         img_blur = cv2.GaussianBlur(img, (3, 3), 0)                 # 가우시안 블러 효과 적용
         img_canny = cv2.Canny(img_blur, 100, 200)                   # 캐니 효과 적용
         _, digit_contours, _ = cv2.findContours(img_canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)    # 모든 외곽선 찾기
@@ -27,32 +28,11 @@ def read_template():
                     rx = x          # 기준치 검사를 위한 변수 저장
 
 
-# 체력 이미지에서 체력 값을 정수로 반환하는 함수
-def health2int(health_frame, height, width):
-
-    # 이미지에서 외곽선 찾기위한 필터 적용
-    health_blur = cv2.GaussianBlur(health_frame, (3, 3), 0)     # 가우시안 블러 효과 적용
-    health_canny = cv2.Canny(health_blur, 150, 200)             # 캐니 효과 적용
-
-    # 체력 값 변환 과정
-    ret_health = 0
-    _, health_contours, _ = cv2.findContours(health_canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)    # 모든 외곽선 찾기
-    for i in range(len(health_contours)):
-        x, y, w, h = cv2.boundingRect(health_contours[i])      # 외곽선의 좌표 반환
-        # 체력 외곽선이 좌측 끝에 붙어있고, 기준 높이 이상인 경우에만 진행
-        if (h > int(height * 4 / 100)) and (x < int(width * 9 / 100)):
-            ret_health = w
-    return ret_health
-
-
 # 점수 이미지에서 점수 값을 정수로 반환하는 함수
 def score2int(score_frame):
-
-    # 이미지에서 외곽선 찾아내기 위한 필터 적용
     score_gray = cv2.cvtColor(score_frame, cv2.COLOR_BGR2GRAY)  # 흑백 이미지 전환
-    cv2.threshold(score_gray, 127, 255, 0)                      # 흑백 색 대비 강화
-    score_blur = cv2.GaussianBlur(score_gray, (5, 5), 0)        # 가우시안 블러 효과 적용
-    score_canny = cv2.Canny(score_blur, 190, 220)               # 캐니 효과 적용
+    # 이미지에서 외곽선 찾아내기 위한 필터 적용
+    score_canny = imf.make_canny(score_frame)
 
     # 외곽선 찾아내고 정수로 전환하기 위한 검사
     _, score_contours, _ = cv2.findContours(score_canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)  # 모든 외곽선 찾기
@@ -109,10 +89,6 @@ def score2int(score_frame):
     score.sort()        # 점수 외곽선들을 왼쪽부터 순서대로 정렬
 
     judge = True
-    # if len(score) > 0 and score[0][1] is not 10:       # 점수 외곽선들의 맨 왼쪽 값이 젤리가 아닌 경우
-    #     score_result = 0
-    #     judge = False
-    # else:                           # 이외의 경우
     score_result = 0
     for i in range(len(score)):         # 점수 배열을 정수 값으로 변환하는 과정
         if score[i][1] is not 10:           # 젤리로 인식되지 않은 경우 (0-9 로 인식)
@@ -130,11 +106,3 @@ def get_score_size(height, width):
     sy2 = int(height * 7 / 100)
     return sx1, sx2, sy1, sy2
 
-
-# 체력 표시 부분의 사이즈 설정
-def get_health_size(height, width):
-    hx1 = int(width * 7 / 100)
-    hx2 = int(width * 90 / 100)
-    hy1 = int(height * 10 / 100)
-    hy2 = int(height * 15 / 100)
-    return hx1, hx2, hy1, hy2
