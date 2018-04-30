@@ -15,12 +15,3 @@ def health2int(health_frame, height, width):
         if (h > int(height * 4 / 100)) and (x < int(width * 9 / 100)):
             ret_health = w
     return ret_health
-
-
-# 체력 표시 부분의 사이즈 설정
-def get_health_size(height, width):
-    hx1 = int(width * 7 / 100)
-    hx2 = int(width * 90 / 100)
-    hy1 = int(height * 10 / 100)
-    hy2 = int(height * 15 / 100)
-    return hx1, hx2, hy1, hy2

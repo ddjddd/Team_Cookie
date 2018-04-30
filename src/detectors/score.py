@@ -96,13 +96,3 @@ def score2int(score_frame):
             score_result += score[i][1]
 
     return score_result, judge
-
-
-# 점수 표시 부분의 사이즈 설정
-def get_score_size(height, width):
-    sx1 = int(width * 60 / 100)
-    sx2 = int(width * 95 / 100)
-    sy1 = int(height * 1 / 100)
-    sy2 = int(height * 7 / 100)
-    return sx1, sx2, sy1, sy2
-
