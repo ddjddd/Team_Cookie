@@ -24,9 +24,8 @@ def make_ground_list(ground_list):
 
 
 # 바닥 오브젝트를 검출
-def ground(frame, hgt, wth):
+def ground(frame, gx1, gx2, gy1, gy2):
     # 바닥 화면만을 우선적으로 검사
-    gx1, gx2, gy1, gy2 = ws.get_ground_size(hgt, wth)
     ground_frame = frame[gy1:gy2, gx1:gx2]
     binary = imf.make_canny(ground_frame)
 
