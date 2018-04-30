@@ -55,7 +55,7 @@ def obstacle(frame, wx1, wx2, wy1, wy2):
         if y <= wy1 + 10:
             obstacle_list.append(object_list[i])
             # cv2.rectangle(frame, (x, y), (w, h), (0, 0, 255), 2)
-        elif h >= wy2 - 10:
+        elif h >= wy2 - 15:
             obstacle_list.append(object_list[i])
             # cv2.rectangle(frame, (x, y), (w, h), (0, 0, 255), 2)
         else:
