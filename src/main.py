@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
+import time
 
-from src.detectors import obstacles as ob, score as sc, ground as gd, health as ht, cookie as ck, collision_detector as cd
+
+from src.detectors import obstacles as ob, score as sc, ground as gd, health as ht, cookie as ck, collision_detector as cd, is_level_up as ilu
 from src import window_size as ws
 from src import grid
 
@@ -25,9 +27,17 @@ def main():
     grid.detect_first(frame)    # 최초 화면에서 그리드 위치 찾기
 
     recent_score, cx, cy, cw, ch = 0, 0, 0, 0, 0     # 선언 및 초기화
+    timecheck = time.time()
+    level = 1
     while True:
         ret, frame = video.read()               # 동영상 입력 받기
         height, width, channels = frame.shape   # 동영상의 크기 입력
+
+        # 다음단계로 넘어가는지 디텍션
+        if ilu.islevelup(frame,timecheck):
+            level += 1
+            print('level %d !!'%(level)) #cv2.putText(frame, "level up!", org=(100, 300), fontFace=1, fontScale=10, color=(255, 0, 0), thickness=5)
+            timecheck = time.time()
 
         # 이미지에서 점수 추출하기
         sx1, sx2, sy1, sy2 = ws.get_score_size(height, width)      # 점수표시부분 크기 추출
@@ -63,7 +73,9 @@ def main():
         cv2.putText(frame, str(score), (500, 140), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
         cv2.imshow('Cookie', frame)
-        cv2.waitKey(0)
+        cv2.waitKey(1)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
     video.release()
     cv2.destroyAllWindows()
