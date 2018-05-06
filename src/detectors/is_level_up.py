@@ -25,7 +25,7 @@ def islevelup(img,inputtime):
     letter = cv2.bitwise_and(letter, letter, mask=mask)
 
 
-    cv2.imshow('letter', letter)
+    #cv2.imshow('letter', letter)
     lettersum= 0
     emptysum = 0
 

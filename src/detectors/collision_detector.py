@@ -56,7 +56,7 @@ def ground_collision(frame, ground_list):
                     color_x = grid.grid_x + ver * grid.unit
                     color_y = grid.grid_y + hor * grid.unit
                     # 회색으로 칠함
-                    frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (100, 69, 170)
+                    frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (0, 0, 255)
 
 
 def obstacle_collision(frame, obstacle_list):
@@ -70,4 +70,4 @@ def obstacle_collision(frame, obstacle_list):
                     color_x = grid.grid_x + ver * grid.unit
                     color_y = grid.grid_y + hor * grid.unit
                     # 회색으로 칠함
-                    frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (69, 170, 100)
+                    frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (0, 0, 255)

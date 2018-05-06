@@ -1,40 +1,44 @@
 import cv2
 import numpy as np
 import time
-
+from PIL import ImageGrab
 
 from src.detectors import obstacles as ob, score as sc, ground as gd, health as ht, cookie as ck, collision_detector as cd, is_level_up as ilu
 from src import window_size as ws
 from src import grid
 
+monitor = ImageGrab.grab()
+monitor = np.array(monitor)[:, :, ::-1].copy()
+monitor = monitor.shape[0]
+monitor =int (monitor/40)
 
-# def screenshots():
-#     x1 = 0
-#     x2 = 830
-#     y1 = 40
-#     y2 = 510
-#     img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
-#     img_np = np.array(img)
-#     return img_np
 
+def screenshots():
+    box = (0, monitor, 852, 480+monitor)
+    im = ImageGrab.grab(box)#.convert('RGB')
+    frame = np.array(im)[:, :, ::-1].copy()
+    return frame
 
 # 메인 함수
 def main():
-    video = cv2.VideoCapture('../resources/Examples/cookierun.mp4')
+
+    frame = screenshots()
     sc.read_template()         # 템플릿 읽기
 
-    ret, frame = video.read()
-    grid.detect_first(frame)    # 최초 화면에서 그리드 위치 찾기
 
+    while not grid.detect_first(frame):# 최초 화면에서 그리드 위치 찾기
+        frame = screenshots()
+
+    print("cookie detected")
     recent_score, cx, cy, cw, ch = 0, 0, 0, 0, 0     # 선언 및 초기화
     timecheck = time.time()
     level = 1
     while True:
-        ret, frame = video.read()               # 동영상 입력 받기
+        frame = screenshots()
         height, width, channels = frame.shape   # 동영상의 크기 입력
 
         # 다음단계로 넘어가는지 디텍션
-        if ilu.islevelup(frame,timecheck):
+        if ilu.islevelup(frame,timecheck): # 레벨3까지는 cookiefun_far2 로도 잘 됨 그런데 쿠키 디텍션이 잘 안됨..... tracker를 써야하나
             level += 1
             print('level %d !!'%(level)) #cv2.putText(frame, "level up!", org=(100, 300), fontFace=1, fontScale=10, color=(255, 0, 0), thickness=5)
             timecheck = time.time()
@@ -77,7 +81,7 @@ def main():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    video.release()
+    #video.release()
     cv2.destroyAllWindows()
 
 

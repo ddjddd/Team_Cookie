@@ -25,6 +25,7 @@ def draw_grid(frame):
 # 최초 1회로 검사
 # 화면에서 쿠키의 위치를 찾고 이를 기준으로 그리드 생성에 필요한 변수를 설정한다
 def detect_first(frame):
+    #cv2.imshow('grid',frame)
     global unit, grid_x, grid_y
     # frame을 HSV (hue-saturation-value)로 변환한다
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -40,15 +41,22 @@ def detect_first(frame):
         hierarchy_num = hierarchy[0][pic][-1]
         x, y, w, h = cv2.boundingRect(contour)
 
+
         if y < 400 and 2000 < area and (200 < x + w / 2) and (x + w / 2 < 240) and hierarchy_num == -1:
             initial_x, initial_y, initial_w, initial_h = x, y, w, h  # 인식한 쿠키 좌표 저장
             cv2.rectangle(frame, (x, y), (x + w, y + h), (170, 100, 69), 2)
 
-    unit = int(initial_w / 2)   # 처음 발견한 쿠키의 너비의 절반을 그리드 단위길이로
+    try:
+        unit = int(initial_w / 2)   # 처음 발견한 쿠키의 너비의 절반을 그리드 단위길이로
+        grid_x = initial_x - unit
+        grid_y = initial_y + initial_h + unit * -8
+        print('grid true')
+        return True
+    except:
+        return False
 
     # 그리드의 위치는 쿠키의 위치를 활용해 설정
-    grid_x = initial_x - unit
-    grid_y = initial_y + initial_h + unit * -8
+
 
 
 

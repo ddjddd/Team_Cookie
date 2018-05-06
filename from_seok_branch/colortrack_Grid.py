@@ -139,6 +139,7 @@ while (ret):
             cookie_detected = True # 투명한 쿠키를 디텍션할 필요 없음
             cookie_save_x ,cookie_save_y, cookie_save_w, cookie_save_h = x, y, w, h # 인식한 쿠키 좌표 저장
             #res4 = cv2.rectangle(res4, (x, y), (x + w, y + h), (170, 100, 69), 2)
+            #cv2.imshow('res4',brown)
             frame = cv2.rectangle(frame, (x, y), (x + w, y + h), (170, 100, 69), 2)
 
     #transp cookie
