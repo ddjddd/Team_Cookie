@@ -53,8 +53,10 @@ def obstacle_collision(matrix, obstacle_list):
         for ver in range(grid.vertical_max):
             for hor in range(grid.horizontal_max):
                 if in_grid_ground(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
+
                                   obstacle_list[i][0], obstacle_list[i][1], obstacle_list[i][2], obstacle_list[i][3]):
                     matrix[hor][ver] = '#'
+
 
 
 def jelly_collision(matrix, jelly_list):
@@ -99,6 +101,5 @@ def ground_collision(matrix, ground_list):
 #                     color_y = grid.grid_y + hor * grid.unit
 #                     # 회색으로 칠함
 #                     frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (69, 170, 100)
-
 
 

@@ -33,7 +33,6 @@ def cookie(cookie_frame, save_x, save_y, save_w, save_h):
         if y < 400 and 2000 < area and (200 < x + w / 2) and (x + w / 2 < 240) and hierarchy_num == -1:
             cookie_detected = True          # 투명한 쿠키를 디텍션할 필요 없음
             save_x, save_y, save_w, save_h = x, y, w, h     # 인식한 쿠키 좌표 저장
-            # cv2.rectangle(cookie_frame, (x, y), (x + w, y + h), (170, 100, 69), 5)
 
     # 일반 쿠키가 미검출 시 투명화된 쿠키 검출
     if not cookie_detected:
