@@ -1,4 +1,6 @@
 from src import grid
+from src import main
+from src import window_size as ws
 
 
 def in_grid(x, y, target_x, target_y, target_w, target_h):
@@ -33,7 +35,7 @@ def in_grid_ground(x, y, target_x, target_y, target_w, target_h):
         return False
 
 
-def cookie_collision(frame, save_x, save_y, save_w, save_h):
+def cookie_collision(matrix, frame, save_x, save_y, save_w, save_h):
     # 그리드 한 칸마다 쿠키(혹은 다른 물체) 가 있는지 확인하기
     for ver in range(grid.vertical_max):
         for hor in range(grid.horizontal_max):
@@ -43,31 +45,60 @@ def cookie_collision(frame, save_x, save_y, save_w, save_h):
                 color_y = grid.grid_y + hor * grid.unit
                 # 회색으로 칠함
                 frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (170, 100, 69)
+                matrix[hor][ver] = '$'
 
 
-def ground_collision(frame, ground_list):
-    for i in range(len(ground_list)):
-        for ver in range(grid.vertical_max):
-            for hor in range(grid.horizontal_max):
-                # print(ground_list[i][0], ground_list[i][1], ground_list[i][2], ground_list[i][3])
-                if in_grid_ground(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
-                                  ground_list[i][0], ground_list[i][1], ground_list[i][2], ground_list[i][3]):
-                    # 쿠키가 있다고 판단된 그리드 좌표
-                    color_x = grid.grid_x + ver * grid.unit
-                    color_y = grid.grid_y + hor * grid.unit
-                    # 회색으로 칠함
-                    frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (100, 69, 170)
-
-
-def obstacle_collision(frame, obstacle_list):
+def obstacle_collision(matrix, obstacle_list):
     for i in range(len(obstacle_list)):
         for ver in range(grid.vertical_max):
             for hor in range(grid.horizontal_max):
-                # print(ground_list[i][0], ground_list[i][1], ground_list[i][2], ground_list[i][3])
                 if in_grid_ground(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
                                   obstacle_list[i][0], obstacle_list[i][1], obstacle_list[i][2], obstacle_list[i][3]):
-                    # 쿠키가 있다고 판단된 그리드 좌표
-                    color_x = grid.grid_x + ver * grid.unit
-                    color_y = grid.grid_y + hor * grid.unit
-                    # 회색으로 칠함
-                    frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (69, 170, 100)
+                    matrix[hor][ver] = '#'
+
+
+def jelly_collision(matrix, jelly_list):
+    for i in range(len(jelly_list)):
+        for ver in range(grid.vertical_max):
+            for hor in range(grid.horizontal_max):
+                if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
+                                  jelly_list[i][0], jelly_list[i][1], jelly_list[i][2], jelly_list[i][3]):
+                    matrix[hor][ver] = '%'
+
+
+def ground_collision(matrix, ground_list):
+    for i in range(len(ground_list)):
+        for ver in range(grid.vertical_max):
+            for hor in range(grid.horizontal_max):
+                if in_grid_ground(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
+                                  ground_list[i][0], ground_list[i][1], ground_list[i][2], ground_list[i][3]):
+                    matrix[hor][ver] = '&'
+
+# def ground_collision(frame, ground_list):
+#     for i in range(len(ground_list)):
+#         for ver in range(grid.vertical_max):
+#             for hor in range(grid.horizontal_max):
+#                 # print(ground_list[i][0], ground_list[i][1], ground_list[i][2], ground_list[i][3])
+#                 if in_grid_ground(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
+#                                   ground_list[i][0], ground_list[i][1], ground_list[i][2], ground_list[i][3]):
+#                     # 쿠키가 있다고 판단된 그리드 좌표
+#                     color_x = grid.grid_x + ver * grid.unit
+#                     color_y = grid.grid_y + hor * grid.unit
+#                     # 회색으로 칠함
+#                     frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (100, 69, 170)
+
+# def obstacle_collision(frame, obstacle_list):
+#     for i in range(len(obstacle_list)):
+#         for ver in range(grid.vertical_max):
+#             for hor in range(grid.horizontal_max):
+#                 # print(ground_list[i][0], ground_list[i][1], ground_list[i][2], ground_list[i][3])
+#                 if in_grid_ground(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
+#                                   obstacle_list[i][0], obstacle_list[i][1], obstacle_list[i][2], obstacle_list[i][3]):
+#                     # 쿠키가 있다고 판단된 그리드 좌표
+#                     color_x = grid.grid_x + ver * grid.unit
+#                     color_y = grid.grid_y + hor * grid.unit
+#                     # 회색으로 칠함
+#                     frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (69, 170, 100)
+
+
+
