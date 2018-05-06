@@ -1,6 +1,6 @@
 import cv2
 from src import image_filter as imf
-from src.detectors import collision_detector as cd
+from src import window_size as ws
 
 
 # 인접한 오브젝트를 묶어 하나의 오브젝트로 만든다
@@ -24,9 +24,8 @@ def make_ground_list(ground_list):
 
 
 # 바닥 오브젝트를 검출
-def ground(frame, gx1, gx2, gy1, gy2):
+def ground(ground_frame):
     # 바닥 화면만을 우선적으로 검사
-    ground_frame = frame[gy1:gy2, gx1:gx2]
     binary = imf.make_canny(ground_frame)
 
     # 외곽선 검출
@@ -37,7 +36,7 @@ def ground(frame, gx1, gx2, gy1, gy2):
         rect_area = w * h
         if roi_hierarchy[0][i][3] is not -1:
             if rect_area >= 250:
-                ground_list.append([x+gx1, y+gy1, x+w+gx1, y+h+gy1])
+                ground_list.append([x+ws.gx1, y+ws.gy1, x+w+ws.gx1, y+h+ws.gy1])
 
     make_ground_list(ground_list)           # 인접한 바닥 오브젝트 묶기
 
@@ -47,6 +46,4 @@ def ground(frame, gx1, gx2, gy1, gy2):
     #     x, y, w, h = ground_list[i]
     #     cv2.rectangle(frame, (x, y), (w, h), (255, 0, 0), 2)
 
-    cd.ground_collision(frame, ground_list)     # 바닥-그리드 충돌 검사 및 그리드 채우기
-
-    return
+    return ground_list

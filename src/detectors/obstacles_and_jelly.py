@@ -1,6 +1,6 @@
 import cv2
 from src import image_filter as imf
-from src.detectors import collision_detector as cd
+from src import window_size as ws
 
 
 def make_obstacle_list(obstacle_list):
@@ -33,9 +33,8 @@ def make_obstacle_list(obstacle_list):
                 j = i + 1
 
 
-def obstacle(frame, wx1, wx2, wy1, wy2):
-    play_frame = frame[wy1:wy2, wx1:wx2]  # 플레이 화면만 잘라내기
-    play_canny = imf.make_canny(play_frame)
+def obstacle(obstacle_frame):
+    play_canny = imf.make_canny(obstacle_frame)
     object_list = []
 
     _, roi_contours, roi_hierarchy = cv2.findContours(play_canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -44,23 +43,25 @@ def obstacle(frame, wx1, wx2, wy1, wy2):
         rect_area = w * h
         if roi_hierarchy[0][i][3] == -1:
             if rect_area >= 550:
-                object_list.append([x+wx1, y+wy1, x+w+wx1, y+h+wy1])
+                # object_list.append([x+main.wx1, y+main.wy1, x+w+main.wx1, y+h+main.wy1])
                 # object_list.append([x, y, x + w, y + h])
+                # object_list.append([x+wx1, y+wy1, x+wx1 + w, y+wy1 + h])
+                object_list.append([x + ws.wx1, y + ws.wy1, x + ws.wx1 + w, y + ws.wy1 + h])
 
     make_obstacle_list(object_list)
 
     obstacle_list = []
+    jelly_list = []
     for i in range(len(object_list)):
         x, y, w, h = object_list[i]
-        if y <= wy1 + 10:
+        if y <= ws.wy1 + 10:
             obstacle_list.append(object_list[i])
             # cv2.rectangle(frame, (x, y), (w, h), (0, 0, 255), 2)
-        elif h >= wy2 - 15:
+        elif h >= ws.wy2 - 15:
             obstacle_list.append(object_list[i])
             # cv2.rectangle(frame, (x, y), (w, h), (0, 0, 255), 2)
         else:
-            cv2.rectangle(frame, (x, y), (w, h), (0, 255, 0), 2)
+            jelly_list.append(object_list[i])
+            # cv2.rectangle(obstacle_frame, (x, y), (w, h), (0, 255, 0), 2)
 
-    cd.obstacle_collision(frame, obstacle_list)
-
-    return
+    return obstacle_list, jelly_list
