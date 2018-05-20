@@ -1,6 +1,7 @@
 from src import grid
 from src import main
 from src import window_size as ws
+import cv2
 
 
 def in_grid(x, y, target_x, target_y, target_w, target_h):
@@ -44,8 +45,9 @@ def cookie_collision(matrix, frame, save_x, save_y, save_w, save_h):
                 color_x = grid.grid_x + ver * grid.unit
                 color_y = grid.grid_y + hor * grid.unit
                 # 회색으로 칠함
+                cv2.imshow('m',frame)
                 frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (170, 100, 69)
-                matrix[hor][ver] = '$'
+                matrix[hor][ver] = 1
 
 
 def obstacle_collision(matrix, obstacle_list):
@@ -55,7 +57,8 @@ def obstacle_collision(matrix, obstacle_list):
                 if in_grid_ground(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
 
                                   obstacle_list[i][0], obstacle_list[i][1], obstacle_list[i][2], obstacle_list[i][3]):
-                    matrix[hor][ver] = '#'
+                    matrix[hor][ver] = 4
+
 
 
 
@@ -65,7 +68,7 @@ def jelly_collision(matrix, jelly_list):
             for hor in range(grid.horizontal_max):
                 if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
                                   jelly_list[i][0], jelly_list[i][1], jelly_list[i][2], jelly_list[i][3]):
-                    matrix[hor][ver] = '%'
+                    matrix[hor][ver] = 7
 
 
 def ground_collision(matrix, ground_list):
@@ -74,7 +77,7 @@ def ground_collision(matrix, ground_list):
             for hor in range(grid.horizontal_max):
                 if in_grid_ground(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
                                   ground_list[i][0], ground_list[i][1], ground_list[i][2], ground_list[i][3]):
-                    matrix[hor][ver] = '&'
+                    matrix[hor][ver] = 3
 
 # def ground_collision(frame, ground_list):
 #     for i in range(len(ground_list)):

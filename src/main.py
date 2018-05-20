@@ -3,9 +3,11 @@ import cv2
 import numpy as np
 import time
 from PIL import ImageGrab
-from src.detectors import obstacles as ob, score as sc, ground as gd, health as ht, cookie as ck, collision_detector as cd, is_level_up as ilu
+from src.detectors import obstacles_and_jelly as ob, score as sc, ground as gd, health as ht, cookie as ck, collision_detector as cd, is_level_up as ilu
 from src import window_size as ws
 from src import grid
+from termcolor import colored
+import sys
 
 monitor = ImageGrab.grab()
 monitor = np.array(monitor)[:, :, ::-1].copy()
@@ -79,7 +81,7 @@ def main():
         ################################
         # 개체 리스트 작성
         ################################
-        matrix = [[' ']*12 for i in range(9)]
+        matrix = [[0]*12 for i in range(9)]
 
         # 이미지에서 장애물 추출하기
         obstacle_list, jelly_list = ob.obstacle(play_frame)
@@ -96,8 +98,29 @@ def main():
 
         # 그리드 그리기
         grid.draw_grid(frame)
+        gridstring=''
         for i in range(9):
-            print(matrix[i])
+            for j in range(12):
+                value = matrix[i][j]
+                if value == 1:
+                    color = 'yellow'
+                elif value == 7:
+                    color = 'blue'
+                elif value == 4 or value == 3:
+                    color = 'red'
+                elif value == 0 :
+                    color = 'white'
+                print(colored(value, color), end='   ')
+                #gridstring+= str(value)+"   "
+            print()
+            #gridstring+="\n"
+        #for i in range(10):
+            #sys.stdout.write("\033[K")
+        #print(gridstring)
+        print("-----------------------------------------------")
+
+
+
 
         cv2.putText(frame, str(health), (140, 140), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
         cv2.putText(frame, str(score), (500, 140), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
