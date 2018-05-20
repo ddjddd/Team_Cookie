@@ -8,6 +8,7 @@
 
 import cv2
 from src.detectors import cookie as ck
+from src import grid
 
 # 전역 변수 선언 및 초기화
 unit = 0                               # 그리드 한 칸(정사각형)의 길이
@@ -38,6 +39,31 @@ def draw_grid(frame):
                  (grid_x, grid_y + unit * hor),
                  (grid_x + unit * vertical_max, grid_y + unit * hor),
                  (40, 40, 40), 2, 1)
+
+
+################################
+# 함수명    : fill_grid
+# 작성자    : 최진호
+# 설명      : 그리드에 색 칠하기
+# 리턴      : _
+# 매개변수  : image frame 전체 화면
+#             matrix matrix 스테이트
+################################
+def fill_grid(frame, matrix):
+    for ver in range(grid.vertical_max):
+        for hor in range(grid.horizontal_max):
+            if matrix[hor][ver] is 1:
+                frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
+                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (170, 100, 69)
+            if matrix[hor][ver] is 7:
+                frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
+                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (170, 69, 100)
+            if matrix[hor][ver] is 4:
+                frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
+                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (100, 170, 69)
+            if matrix[hor][ver] is 3:
+                frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
+                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (100, 69, 170)
 
 
 ################################
