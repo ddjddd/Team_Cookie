@@ -1,3 +1,11 @@
+################################
+################################
+# 모듈명    : cookie
+# 작성자    : 이석범, 최진호
+# 설명      : 화면에서 쿠키를 검출
+################################
+################################
+
 import numpy as np
 import cv2
 from src import window_size as ws
@@ -8,6 +16,16 @@ brown_upper = np.array([15, 180, 255], np.uint8)
 kernel = np.ones((5, 5), "uint8")
 
 
+################################
+# 함수명    : cookie
+# 작성자    : 이석범
+# 설명      : 분할된 쿠키 화면에서 쿠키를 인식하고 쿠키 좌표 반환
+# 리턴      : int saved_x, saved_y 쿠키 시작 좌표 (좌상단)
+#             int saved_w, saved_h 검출된 쿠키의 너비, 높이
+# 매개변수  : image cookie_health_frame 분할된 쿠키 화면
+#             int saved_x, saved_y 이전 프레임의 쿠키 시작 좌표 (좌상단)
+#             int saved_w, saved_h 이전 프레임의 검출된 쿠키의 너비, 높이
+################################
 def cookie(cookie_frame, save_x, save_y, save_w, save_h):
     # frame 을 HSV (hue-saturation-value)로 변환한다
     hsv = cv2.cvtColor(cookie_frame, cv2.COLOR_BGR2HSV)
