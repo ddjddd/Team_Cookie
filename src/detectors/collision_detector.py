@@ -55,12 +55,6 @@ def cookie_collision(matrix, save_x, save_y, save_w, save_h):
     for ver in range(grid.vertical_max):
         for hor in range(grid.horizontal_max):
             if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit, save_x, save_y, save_x + save_w, save_y + save_h):
-                # 쿠키가 있다고 판단된 그리드 좌표
-                color_x = grid.grid_x + ver * grid.unit
-                color_y = grid.grid_y + hor * grid.unit
-                # 회색으로 칠함
-                #cv2.imshow('m',frame)
-                frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (170, 100, 69)
                 matrix[hor][ver] = 1
 
 
