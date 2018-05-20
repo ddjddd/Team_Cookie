@@ -50,20 +50,20 @@ def draw_grid(frame):
 #             matrix matrix 스테이트
 ################################
 def fill_grid(frame, matrix):
-    for ver in range(grid.vertical_max):
-        for hor in range(grid.horizontal_max):
+    for ver in range(vertical_max):
+        for hor in range(horizontal_max):
             if matrix[hor][ver] is 1:
-                frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
-                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (170, 100, 69)
+                frame[grid_y + unit * hor: grid_y + unit * (hor + 1),
+                grid_x + unit * ver: grid_x + unit * (ver + 1)] = (170, 100, 69)
             if matrix[hor][ver] is 7:
-                frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
-                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (170, 69, 100)
+                frame[grid_y + unit * hor: grid_y + unit * (hor + 1),
+                grid_x + unit * ver: grid_x + unit * (ver + 1)] = (170, 69, 100)
             if matrix[hor][ver] is 4:
-                frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
-                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (100, 170, 69)
+                frame[grid_y + unit * hor: grid_y + unit * (hor + 1),
+                grid_x + unit * ver: grid_x + unit * (ver + 1)] = (100, 170, 69)
             if matrix[hor][ver] is 3:
-                frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
-                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (100, 69, 170)
+                frame[grid_y + unit * hor: grid_y + unit * (hor + 1),
+                grid_x + unit * ver: grid_x + unit * (ver + 1)] = (100, 69, 170)
 
 
 ################################
