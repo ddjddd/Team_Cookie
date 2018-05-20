@@ -40,16 +40,17 @@ def screenshots():
 def main():
     ################################
     # 분석할 이미지   : 동영상
-    video = cv2.VideoCapture('../resources/Examples/cookierun.mp4')
+    #video = cv2.VideoCapture('../resources/Examples/cookierun.mp4')
+    # 프레임 읽기
+    # ret, frame = video.read()
     ################################
 
     ################################
     # 분석할 이미지   : 에뮬레이터 스크린샷
-    # frame = screenshots()
+    frame = screenshots()
     ################################
 
-    # 프레임 읽기
-    ret, frame = video.read()
+
 
     ################################
     # 이미지 분석 시작 전 각 종 변수 초기화
@@ -79,12 +80,12 @@ def main():
     while True:
         ################################
         # 프레임 입력 받기 : 예제 동영상
-        ret, frame = video.read()
+        #ret, frame = video.read()
         ################################
 
         ################################
         # 프레임 입력 받기 : 에뮬레이터 스크린샷
-        # frame = screenshots()
+        frame = screenshots()
         ################################
 
         # 다음단계로 넘어가는지 디텍션
@@ -124,7 +125,7 @@ def main():
 
         ################################
         # 그리드 그리기
-        # grid.draw_grid(frame) # 그리드 틀 그리기
+        grid.draw_grid(frame) # 그리드 틀 그리기
         ################################
 
         ################################
@@ -158,7 +159,7 @@ def main():
 
     ################################
     # 입력이 예제 동영상인 경우
-    video.release()
+    #video.release()
     ################################
 
     cv2.destroyAllWindows()     # 종료시 창 닫기
