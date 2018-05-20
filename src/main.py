@@ -2,9 +2,13 @@ import cv2
 import numpy as np
 import time
 from PIL import ImageGrab
+
 from src import window_size as ws, grid
 from src.detectors import obstacles_and_jelly as ob, score as sc, ground as gd, health as ht, cookie as ck
 from src.detectors import collision_detector as cd, is_level_up as ilu
+from termcolor import colored
+import sys
+
 
 monitor = ImageGrab.grab()
 monitor = np.array(monitor)[:, :, ::-1].copy()
@@ -106,6 +110,7 @@ def main():
 
         # current state matrix
         # 그리드(매트릭스) 초기화 ( 9 * 12 배열 )
+
         matrix = [[0]*12 for i in range(9)]
 
         # 각종 개체 리스트 검출
@@ -125,8 +130,22 @@ def main():
         ################################
         # 그리드 매트릭스 출력
         for i in range(9):
-            print(matrix[i])
-        ################################
+
+            for j in range(12):
+                value = matrix[i][j]
+                if value == 1:
+                    color = 'yellow'
+                elif value == 7:
+                    color = 'blue'
+                elif value == 4 or value == 3:
+                    color = 'red'
+                elif value == 0 :
+                    color = 'white'
+                print(colored(value, color), end='   ')
+                #gridstring+= str(value)+"   "
+            print()
+        print("-----------------------------------------------")
+
 
         # 화면에 체력, 점수 출력
         cv2.putText(frame, str(health), (140, 140), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)

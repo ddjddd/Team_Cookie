@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import time
 
+
 def islevelup(img,inputtime):
 
     window_y, window_x, _ = img.shape  # 화면의 크기
@@ -41,12 +42,5 @@ def islevelup(img,inputtime):
         emptysum += sum(empty[0,i])
     if lettersum/i > threshold and emptysum/i < threshold2 and current-inputtime > 5 : # 글자부분은 하얗고, 다른 공간은 까맣고, 전 레벨업 부터 5초 이상 지났을 때
         return True
-
-    # cv2.imshow('letter_original2', empty)
-    # cv2.imshow('letter_original', image)
-
-    #scale=10
-    #image= cv2.resize(image, None, fx=1/scale, fy=1/scale)
-    #image = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST)
 
     return False

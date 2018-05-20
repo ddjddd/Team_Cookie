@@ -10,6 +10,7 @@
 from src import grid
 from src import main
 from src import window_size as ws
+import cv2
 
 
 ################################
@@ -53,15 +54,14 @@ def cookie_collision(matrix, save_x, save_y, save_w, save_h):
     # 그리드 한 칸마다 쿠키가 있는지 확인하기
     for ver in range(grid.vertical_max):
         for hor in range(grid.horizontal_max):
-            if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
-                       save_x, save_y, save_x + save_w, save_y + save_h):
+            if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit, save_x, save_y, save_x + save_w, save_y + save_h):
+                # 쿠키가 있다고 판단된 그리드 좌표
+                color_x = grid.grid_x + ver * grid.unit
+                color_y = grid.grid_y + hor * grid.unit
+                # 회색으로 칠함
+                #cv2.imshow('m',frame)
+                frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (170, 100, 69)
                 matrix[hor][ver] = 1
-
-                # # 쿠키가 있다고 판단된 그리드 좌표
-                # color_x = grid.grid_x + ver * grid.unit
-                # color_y = grid.grid_y + hor * grid.unit
-                # # 회색으로 칠함
-                # frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (170, 100, 69)
 
 
 ################################
@@ -80,12 +80,13 @@ def object_collision_detector(matrix, obstacle_list, jelly_list, ground_list):
             for i in range(len(obstacle_list)):
                 if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
                            obstacle_list[i][0], obstacle_list[i][1], obstacle_list[i][2], obstacle_list[i][3]):
-                    matrix[hor][ver] = 2
+                    matrix[hor][ver] = 4
             for i in range(len(jelly_list)):
                 if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
                            jelly_list[i][0], jelly_list[i][1], jelly_list[i][2], jelly_list[i][3]):
-                    matrix[hor][ver] = 3
+                    matrix[hor][ver] = 7
             for i in range(len(ground_list)):
                 if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
                            ground_list[i][0], ground_list[i][1], ground_list[i][2], ground_list[i][3]):
-                    matrix[hor][ver] = 4
+                    matrix[hor][ver] = 3
+
