@@ -45,7 +45,7 @@ def cookie_collision(matrix, frame, save_x, save_y, save_w, save_h):
                 color_x = grid.grid_x + ver * grid.unit
                 color_y = grid.grid_y + hor * grid.unit
                 # 회색으로 칠함
-                cv2.imshow('m',frame)
+                #cv2.imshow('m',frame)
                 frame[color_y: color_y + grid.unit, color_x: color_x + grid.unit] = (170, 100, 69)
                 matrix[hor][ver] = 1
 

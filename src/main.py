@@ -98,7 +98,6 @@ def main():
 
         # 그리드 그리기
         grid.draw_grid(frame)
-        gridstring=''
         for i in range(9):
             for j in range(12):
                 value = matrix[i][j]
@@ -113,10 +112,6 @@ def main():
                 print(colored(value, color), end='   ')
                 #gridstring+= str(value)+"   "
             print()
-            #gridstring+="\n"
-        #for i in range(10):
-            #sys.stdout.write("\033[K")
-        #print(gridstring)
         print("-----------------------------------------------")
 
 
