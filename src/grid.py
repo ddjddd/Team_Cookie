@@ -54,16 +54,16 @@ def fill_grid(frame, matrix):
         for hor in range(grid.horizontal_max):
             if matrix[hor][ver] is 1:
                 frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
-                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (170, 100, 69)
+                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (0, 255, 255)
             if matrix[hor][ver] is 7:
                 frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
-                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (170, 69, 100)
+                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (255, 0, 0)
             if matrix[hor][ver] is 4:
                 frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
-                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (100, 170, 69)
+                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (0, 0, 255)
             if matrix[hor][ver] is 3:
                 frame[grid.grid_y + grid.unit * hor: grid.grid_y + grid.unit * (hor + 1),
-                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (100, 69, 170)
+                grid.grid_x + grid.unit * ver: grid.grid_x + grid.unit * (ver + 1)] = (0, 0, 0)
 
 
 ################################

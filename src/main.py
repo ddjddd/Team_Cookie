@@ -7,13 +7,21 @@ from src import window_size as ws, grid
 from src.detectors import obstacles_and_jelly as ob, score as sc, ground as gd, health as ht, cookie as ck
 from src.detectors import collision_detector as cd, is_level_up as ilu
 from termcolor import colored
+import emulator
+
+from keras.models import Sequential
+from keras.layers import Dense
+import numpy as np
+import random
+
+
 import sys
 
 
 monitor = ImageGrab.grab()
 monitor = np.array(monitor)[:, :, ::-1].copy()
 monitor = monitor.shape[0]
-monitor = int(monitor/40)
+monitor = int(monitor/28)
 
 
 ################################
@@ -38,18 +46,23 @@ def screenshots():
 # 매개변수  : _
 ################################
 def main():
+    model = Sequential()
+    model.add(Dense(units=32, activation='tanh', input_dim=108, use_bias=False))
+    model.add(Dense(units=16, activation='tanh', input_dim=108, use_bias=False))
+    model.add(Dense(units=3, activation='softmax', use_bias=False))
     ################################
     # 분석할 이미지   : 동영상
-    video = cv2.VideoCapture('../resources/Examples/cookierun.mp4')
+    #video = cv2.VideoCapture('../resources/Examples/cookierun.mp4')
+    # 프레임 읽기
+    #ret, frame = video.read()
     ################################
 
     ################################
     # 분석할 이미지   : 에뮬레이터 스크린샷
-    # frame = screenshots()
+    frame = screenshots()
     ################################
 
-    # 프레임 읽기
-    ret, frame = video.read()
+
 
     ################################
     # 이미지 분석 시작 전 각 종 변수 초기화
@@ -79,12 +92,12 @@ def main():
     while True:
         ################################
         # 프레임 입력 받기 : 예제 동영상
-        ret, frame = video.read()
+        # ret, frame = video.read()
         ################################
 
         ################################
         # 프레임 입력 받기 : 에뮬레이터 스크린샷
-        # frame = screenshots()
+        frame = screenshots()
         ################################
 
         # 다음단계로 넘어가는지 디텍션
@@ -123,7 +136,7 @@ def main():
         cd.cookie_collision(matrix, cx, cy, cw, ch)                  # 쿠키 충돌검사
 
         ################################
-        # 그리드 그리기
+        # 그리드 그리기q
         grid.draw_grid(frame) # 그리드 틀 그리기
         grid.fill_grid(frame, matrix)   # 그리드 채우기
         ################################
@@ -136,9 +149,9 @@ def main():
                 value = matrix[i][j]
                 if value == 1:
                     color = 'yellow'
-                elif value == 7:
+                elif value == 2:
                     color = 'blue'
-                elif value == 4 or value == 3:
+                elif value == -1 or value == -2:
                     color = 'red'
                 elif value == 0 :
                     color = 'white'
@@ -146,7 +159,15 @@ def main():
                 #gridstring+= str(value)+"   "
             print()
         print("-----------------------------------------------")
-
+        inputmatrix = np.array([np.array(matrix).flatten()])
+        result = model.predict(inputmatrix)
+        action = np.argmax(result)
+        if action == 0:
+            emulator.cookie_jump(852, 480)
+        elif action ==1:
+            emulator.cookie_slide(852, 480)
+        else:
+            emulator.cookie_donothing(852, 480)
 
 
 
@@ -161,7 +182,7 @@ def main():
 
     ################################
     # 입력이 예제 동영상인 경우
-    video.release()
+    # video.release()
     ################################
 
     cv2.destroyAllWindows()     # 종료시 창 닫기

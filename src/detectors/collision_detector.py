@@ -74,13 +74,13 @@ def object_collision_detector(matrix, obstacle_list, jelly_list, ground_list):
             for i in range(len(obstacle_list)):
                 if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
                            obstacle_list[i][0], obstacle_list[i][1], obstacle_list[i][2], obstacle_list[i][3]):
-                    matrix[hor][ver] = 4
+                    matrix[hor][ver] = -2
             for i in range(len(jelly_list)):
                 if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
                            jelly_list[i][0], jelly_list[i][1], jelly_list[i][2], jelly_list[i][3]):
-                    matrix[hor][ver] = 7
+                    matrix[hor][ver] = 2
             for i in range(len(ground_list)):
                 if in_grid(grid.grid_x + ver * grid.unit, grid.grid_y + hor * grid.unit,
                            ground_list[i][0], ground_list[i][1], ground_list[i][2], ground_list[i][3]):
-                    matrix[hor][ver] = 3
+                    matrix[hor][ver] = -1
 
