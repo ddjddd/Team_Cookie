@@ -24,12 +24,13 @@ def cookie_jump(width, height):
     jump_x = int(width * 2 /10)
     jump_x2 = int(width * 8 / 10)
     jump_y = int(height*6/10)
-
-    win32api.SetCursorPos((jump_x2, jump_y))
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)  #
-    win32api.SetCursorPos((jump_x, jump_y))
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+    win32api.keybd_event(0x31, 0, 0, 0) # '1'
+    win32api.keybd_event(0x31, 0, win32con.KEYEVENTF_KEYUP, 0)
+    # win32api.SetCursorPos((jump_x2, jump_y))
+    # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)  #
+    # win32api.SetCursorPos((jump_x, jump_y))
+    # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+    # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
 
 ################################
@@ -40,16 +41,20 @@ def cookie_jump(width, height):
 #             int wth 에뮬레이터 화면의 너비
 ################################
 def cookie_slide(width, height):
-    slide_x = int(width * 6 / 10)
-    slide_y = int(height * 5 / 10)
-    win32api.SetCursorPos((slide_x, slide_y))
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-    #win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+    win32api.keybd_event(0x32, 0, 0, 0) #'2'
+    # win32api.keybd_event('1', 0, win32con.KEYEVENTF_KEYUP, 0)
+    # slide_x = int(width * 6 / 10)
+    # slide_y = int(height * 5 / 10)
+    # win32api.SetCursorPos((slide_x, slide_y))
+    # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+    # #win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
 def cookie_donothing(width, height):
-    slide_x = int(width * 6 / 10)
-    slide_y = int(height * 5 / 10)
-    win32api.SetCursorPos((slide_x, slide_y))
-    #win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+    # win32api.keybd_event('1', 0, 0, 0)
+    win32api.keybd_event(0x32, 0, win32con.KEYEVENTF_KEYUP, 0)
+    # slide_x = int(width * 6 / 10)
+    # slide_y = int(height * 5 / 10)
+    # win32api.SetCursorPos((slide_x, slide_y))
+    # #win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+    # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
