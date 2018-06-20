@@ -12,7 +12,7 @@ from src import image_filter as imf
 # 전역 변수 선언 및 초기화
 tpl_name_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'B']
 tpl_contour_list = []
-
+score_before=0
 
 ################################
 # 함수명    : read_template
@@ -61,7 +61,7 @@ def score2int(score_frame):
     _, score_contours, _ = cv2.findContours(score_canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)  # 모든 외곽선 찾기
     rx = 0
     score_cnt_list = []
-    for i in range(len(score_contours)):    # 모든 외곽선 집함베 대하여 검사
+    for i in range(len(score_contours)):    # 모든 외곽선 집합에 대하여 검사
         x, y, w, h = cv2.boundingRect(score_contours[i])    # 현재 점수 외곽선의 좌표 받아오기
         rect_area = w * h               # 외곽선의 넓이
         aspect_ratio = float(w) / h     # 외관선의 너비-높이 비율
@@ -111,11 +111,24 @@ def score2int(score_frame):
 
     score.sort()        # 점수 외곽선들을 왼쪽부터 순서대로 정렬
 
+    global score_before
+
     judge = True
     score_result = 0
+
     for i in range(len(score)):         # 점수 배열을 정수 값으로 변환하는 과정
         if score[i][1] is not 10:           # 젤리로 인식되지 않은 경우 (0-9 로 인식)
             score_result *= 10
             score_result += score[i][1]
+
+    #직전의 점수 상태와 새로 도출한 점수를 비교하는 과정
+    if(score_before!=0):
+        if(score_before<=score_result):
+            if(score_result-score_before>40000):    #숫자의 증가폭이 4만점 이상이면 잘못 인식된 점수로 간주
+                score_result=score_before           #새 점수를 점수에 반영하지 않는다
+        else:          #새로운 점수가 이전의 점수보다 오히려 줄어든 경우 역시 점수 인식이 잘못된 상황
+            score_result=score_before
+
+    score_before=score_result
 
     return score_result, judge
