@@ -6,6 +6,7 @@ from PIL import ImageGrab
 from src import window_size as ws, grid
 from src.detectors import obstacles_and_jelly as ob, score as sc, ground as gd, health as ht, cookie as ck
 from src.detectors import collision_detector as cd, is_level_up as ilu
+from src import image_filter as imf
 from termcolor import colored
 import sys
 
@@ -76,7 +77,11 @@ def main():
     recent_score, cx, cy, cw, ch = 0, 0, 0, 0, 0     # 선언 및 초기화
     timecheck = time.time()
     level = 1
-    while True:
+
+    end_detection = False
+    count_frame = 0
+
+    while end_detection is False:
         ################################
         # 프레임 입력 받기 : 예제 동영상
         ret, frame = video.read()
@@ -113,39 +118,39 @@ def main():
 
         matrix = [[0]*12 for i in range(9)]
 
-        # 각종 개체 리스트 검출
-        obstacle_list, jelly_list = ob.obstacle_and_jelly(play_frame)         # 장애물, 젤리 리스트
-        ground_list = gd.ground(ground_frame)                       # 바닥 리스트
-        cx, cy, cw, ch = ck.cookie(cookie_frame, cx, cy, cw, ch)    # 쿠키
-
-        # 개체 리스트 요소들과 그리드 충돌 검사
-        cd.object_collision_detector(matrix, obstacle_list, jelly_list, ground_list)
-        cd.cookie_collision(matrix, cx, cy, cw, ch)                  # 쿠키 충돌검사
+        # # 각종 개체 리스트 검출
+        # obstacle_list, jelly_list = ob.obstacle_and_jelly(play_frame)         # 장애물, 젤리 리스트
+        # ground_list = gd.ground(ground_frame)                       # 바닥 리스트
+        # cx, cy, cw, ch = ck.cookie(cookie_frame, cx, cy, cw, ch)    # 쿠키
+        #
+        # # 개체 리스트 요소들과 그리드 충돌 검사
+        # cd.object_collision_detector(matrix, obstacle_list, jelly_list, ground_list)
+        # cd.cookie_collision(matrix, cx, cy, cw, ch)                  # 쿠키 충돌검사
 
         ################################
         # 그리드 그리기
-        grid.draw_grid(frame) # 그리드 틀 그리기
-        grid.fill_grid(frame, matrix)   # 그리드 채우기
+        # grid.draw_grid(frame) # 그리드 틀 그리기
+        # grid.fill_grid(frame, matrix)   # 그리드 채우기
         ################################
 
         ################################
-        # 그리드 매트릭스 출력
-        for i in range(9):
-
-            for j in range(12):
-                value = matrix[i][j]
-                if value == 1:
-                    color = 'yellow'
-                elif value == 7:
-                    color = 'blue'
-                elif value == 4 or value == 3:
-                    color = 'red'
-                elif value == 0 :
-                    color = 'white'
-                print(colored(value, color), end='   ')
-                #gridstring+= str(value)+"   "
-            print()
-        print("-----------------------------------------------")
+        # # 그리드 매트릭스 출력
+        # for i in range(9):
+        #
+        #     for j in range(12):
+        #         value = matrix[i][j]
+        #         if value == 1:
+        #             color = 'yellow'
+        #         elif value == 7:
+        #             color = 'blue'
+        #         elif value == 4 or value == 3:
+        #             color = 'red'
+        #         elif value == 0 :
+        #             color = 'white'
+        #         print(colored(value, color), end='   ')
+        #         #gridstring+= str(value)+"   "
+        #     print()
+        # print("-----------------------------------------------")
 
 
 
@@ -159,6 +164,13 @@ def main():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
+        # # 게임 종료 검사
+        if health < 1:
+            count_frame += 1
+            if count_frame >= 72:
+                end_detection = True
+                return frame
+
     ################################
     # 입력이 예제 동영상인 경우
     video.release()
@@ -166,6 +178,27 @@ def main():
 
     cv2.destroyAllWindows()     # 종료시 창 닫기
 
-
 if __name__ == '__main__':
-    main()
+    # 게임 시작 시
+    # 게임 플레이 중 디텍션
+    current_frame = main()
+
+    tpl = cv2.imread('../resources/Templates/' + 'check' + '.png', cv2.IMREAD_GRAYSCALE)
+    w, h = tpl.shape[::-1]
+    gray = cv2.cvtColor(current_frame, cv2.COLOR_BGR2GRAY)
+    res = cv2.matchTemplate(gray, tpl, cv2.TM_CCORR_NORMED)
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+    top_left = max_loc
+    bottom_right = (top_left[0] + w, top_left[1] + h)
+    cv2.rectangle(current_frame, top_left, bottom_right, 255, 2)
+    cv2.imshow('check', current_frame)
+    cv2.waitKey(0)
+    print(max_val)
+    # 게임 종료 후 메인화면으로
+    # 순위변경
+
+    # 상자 획득
+
+
+    #
+
