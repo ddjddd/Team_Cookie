@@ -17,6 +17,14 @@ import random
 
 import sys
 
+#####
+# 듀얼 모니터 등 컴퓨터의 디스플레이 세팅값 다르면 읽어와서 맞춤.
+#####
+from ctypes import windll
+
+user32 = windll.user32
+user32.SetProcessDPIAware()
+
 
 monitor = ImageGrab.grab()
 monitor = np.array(monitor)[:, :, ::-1].copy()
